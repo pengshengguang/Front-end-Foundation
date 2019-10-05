@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>获取元素的偏移量offset</title>
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #outer{
+            margin: 20px auto;
+            padding: 50px;
+            width: 180px;
+            height: 180px;
+            border: 10px solid #000;
+            background: orange;
+        }
+        #inner{
+            padding: 50px;
+            width: 80px;
+            height: 80px;
+            border: 10px solid #000;
+            background: green;
+        }
+        #center{
+            width: 50px;
+            height: 50px;
+            border: 10px solid #000;
+            background: red;
+        }
+
+    </style>
+</head>
+<body>
+<div id="outer">
+    <div id="inner">
+        <div id="center"></div>
+    </div>
+</div>
+<ul class="list clear">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+<script type="text/javascript">
+    var outer = document.getElementById("outer"),
+        inner = document.getElementById("inner"),
+        center = document.getElementById("center")
+
+    //1.parentNode: 父亲节点 HTML结构层级关系中的上一级元素
+    // center.parentNode //-> inner;
+    // inner.parentNode //-> outer;
+    // outer.parentNode //-> body;
+    // document.documentElement.parentNode // ->document
+    // document.parentNode //-> null
+
+    //2.offsetParent: 父级参照物 在同一个平面中，最外层的元素是里面所有元素的父级参照物（和HTML层级结构没有必然联系）
+    //->一般来说一个页面中所有元素的父级参照物都是body
+    // center.offsetParent //-> body;
+    // inner.offsetParent //-> body;
+    // outer.offsetParent //-> body;
+    // document.body.offsetParent  //->null
+
+    //3.想要改变父级参照物，需要通过position定位来进行改变: absolute、relative、fixed任意一个之都可以把父级
+    //  参照物进行修改
+    // position: inherit;
+    // position: static;
+
+    // position: absolute;
+    // position: relative;
+    // position: fixed;
+    outer.style.position = 'relative';
+    // console.log(inner.offsetParent); // 原本父级参照物为body，现在已经变成outer了
+
+    //4.offsetTop/offsetLeft: 当前元素（外边框）距离其父级参照物（内边框）的偏移距离
+
+    //5.问题来了，如果一个元素的父级参照物不为body，那么怎么得到他距离body的偏移量呢？
+    //  自己写一个方法，offset, 等同于jQuery中的offset方法，实现获取页面中任意一个元素，
+    //                       距离body的偏移量（包含左偏移和上偏移），不管当前元素的父级参照物是谁
+    //
+    // 在标准的IE8浏览器中，我们使用offsetLeft/offsetTop其实是把父级参照物的边框已经算在内了
+
+    function  offset(curEle) {
+        var totalLeft = null,
+            totalTop = null,
+            par = curEle.offsetParent;
+        // 首先把自己本身的进行累加
+        totalLeft += curEle.offsetLeft;
+        totalTop += curEle.offsetTop;
+
+        while (par) {
+            if (navigator.userAgent.indexOf("MSIE 8.0") === -1) {
+                // 累加父级参照物边框
+                totalTop += par.clientTop;
+                totalLeft += par.clientLeft;
+            }
+            // 累加父级参照物本身的偏移
+            totalTop += par.offsetTop;
+            totalLeft += par.offsetLeft;
+            par = par.offsetParent;
+        }
+        console.log('offsetTop: ' + totalTop + ', offsetLeft: ' + totalLeft);
+    }
+    offset(center);
+
+
+
+
+</script>
+</body>
+</html>

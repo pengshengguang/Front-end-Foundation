@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--做移动端响应式布局页面，都需要加下面的meta-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--meta:vp+tap一键生成-->
+    <title>多张图片的延迟加载</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: "Microsoft Sans Serif";
+            font-size: 14px;
+        }
+        ul, li {
+            list-style: none;
+        }
+        img {
+            display: block;
+            border: none;
+        }
+        .news {
+            padding: 10px;
+        }
+        .news li {
+            position: relative;
+            height: 60px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .news li > div:first-child {   /*意思是，li下面的子div，中的第一个*/
+            position: absolute;
+            top: 10px;
+            left: 0;
+            width: 75px;
+            height: 60px;
+            background: url("./img/loading.PNG") no-repeat center center #e1e1e1;
+            background-size: 100% 100%;
+        }
+        /*移动端布局，最外层容器是不设置宽高的*/
+
+        .news li > div:first-child img {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .news li > div:nth-child(2) {
+            height: 60px;
+            margin-left: 80px;
+        }
+        .news li > div:nth-child(2) h2 {
+            height: 20px;
+            line-height: 20px;
+            /*实现文字超出一行自动裁切*/
+            overflow: hidden;
+            text-overflow: ellipsis; /*超出部分省略号显示*/
+            white-space: nowrap; /*强制不换行*/
+        }
+        .news li > div:nth-child(2) p {
+            line-height: 20px;
+            font-size: 12px;
+            color: #616161;
+        }
+    </style>
+</head>
+<body>
+    <ul id="news" class="news">
+        <li>
+            <div>
+                <img src="./img/new1.PNG" alt="">
+            </div>
+            <div>
+                <h2>香港四大家族往事,香港四大家族往事,香港四大家族往事</h2>
+                <p>香港四大家族往事：李嘉诚为郑裕彤扶灵香港四大家族往事：李嘉诚为郑裕彤扶灵</p>
+            </div>
+        </li>
+    </ul>
+
+
+
+
+<script type="text/javascript" src="./tool/utils.js"></script>
+<script type="text/javascript">
+    // 1、获取需要绑定的数据(通过Ajax)
+    var jsonData = null;
+    ~function () {
+        var xhr = new XMLHttpRequest;
+        // URL地址后面加随机数目的：清除每一次请求数据时候（get请求）产生的缓存
+        // 因为每次访问的地址不一样，样浏览器就不会尝试缓存来自服务器的响应，读取本地缓存的数据。
+        xhr.open('get', 'json/newsList.txt?' + Math.random(), false);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && /^2\d{2}$/.test(xhr.status)) {
+                var val = xhr.responseText;
+                jsonData = utils.jsonParse(val);
+            }
+        }
+        xhr.send(null);
+    }();
+    console.log(jsonData);
+
+</script>
+</body>
+</html>

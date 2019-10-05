@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS异步编程思想</title>
+    <style type="text/css">
+    </style>
+</head>
+<body>
+<script type="text/javascript">
+    // JS是单线程的 ->JS就是一个傻子，脑子一根筋，做着当前的这件事情，没有完成之前绝对不会做下一件事情
+    // JS中的两种编程思想：同步，异步
+    // 同步：上一件事情没做完，继续处理上一件事情，只有上一件事情完成了，才回做下一件事情（JS中大部分都是同步编程）
+    //      for循环就是一个例子
+    // 异步：规划做一件事情，但是不是当前立马去执行完这件事情，需要等一段时间才能执行完，但是我们不会等着他执行完，
+    //      而是继续执行下面的操作，只有当下面的事情都处理完了，才回返回来处理之前的事情；如果下面的事情并没有处理完成，
+    //      不管之前的事情有没有到时间，都给我踏踏实实地等着
+
+    // JS异步编程只有四种情况：
+    // -> 定时器
+    // -> 事件绑定
+    // -> Ajax读取数据
+    // -> 回调函数
+
+    // var n = 0;
+    // window.setTimeout(function() {
+    //     n++;
+    //     console.log(n);
+    // }, 1000)
+    // console.log(n);
+
+    // 每一个浏览器对于定时器的等待时间都有一个最小值，谷歌：5~6ms， IE：10~13ms
+    // 如果设置的等待时间小于这个值，不起作用，还是得等到最小时间才起作用，尤其是写0也不是立即执行的
+    // var n = 0;
+    // window.setTimeout(function() {
+    //     n++;
+    //     console.log(n);
+    // })
+    // console.log(n);
+
+    // 我们定时器设置的时间不一定是最后执行的时间，如果定时器之后还有其他的事情正在处理中，不管定时器的时间有没有到，
+    // 都是不会执行定时间里面的回调函数的
+    // var n = 0;
+    // window.setTimeout(function() {
+    //     n++; //不执行
+    //     console.log(n); //不执行
+    // }, 0)
+    // console.log(n);  //输出一次，0
+    // while(1) { //->死循环
+    //     n++;
+    // }
+    // console.log(n); //不执行
+
+
+    var n = 0;
+    window.setTimeout(function () {
+        n += 2;
+        console.log('定时器100');
+        console.log(n);
+    }, 20)
+    window.setTimeout(function () {
+        n += 5;
+        console.log('定时器50');
+        console.log(n);
+    }, 30)
+    console.log(n);
+    for (var i = 0; i < 10000000; i++) {
+
+    }
+    console.log(n);
+
+
+</script>
+</body>
+</html>

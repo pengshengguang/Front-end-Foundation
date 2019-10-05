@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>跑马灯</title>
+    <style type="text/css">
+        /*写CSS的时候第一步初始化默认样式，避免浏览器之间的差异->不仅如此，而且写默认样式对JS以后获取到的结果统一是有帮助的*/
+        *{
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+        }
+        #box{
+            margin: 50px auto;
+            padding: 0 10px;
+            width: 1000px;
+            height: 35px;
+            line-height: 35px;
+            border: 1px solid lightpink;
+            background: lightcyan;
+        }
+
+        #wrap{
+            white-space: nowrap; /*强制文字不换行*/
+            height: 35px;
+            overflow: hidden;
+        }
+        #wrap div{
+           display: inline-block;
+        }
+        #wrap span{
+            color: red;
+            font-weight: bold;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div id="box">
+        <div id="wrap">
+            <div id="conBegin">
+                <span>通知：</span>每一个人都是通过自己的努力，去决定自己生活的样子。每一个人都是通过自己的努力，去决定自己生活的样子。1111111111111111111111111111111111111111111111111111111111——彭胜光
+            </div>
+            <div id="conEnd">
+                <span>通知：</span>每一个人都是通过自己的努力，去决定自己生活的样子。每一个人都是通过自己的努力，去决定自己生活的样子。1111111111111111111111111111111111111111111111111111111111——彭胜光
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var box = document.getElementById('box');
+        var wrap = document.getElementById('wrap');
+        var conBegin = document.getElementById('conBegin');
+
+        // 跑马灯效果一，没有连续的效果，并且有闪动的动画，非常不友好
+        // var timer = window.setInterval(function () {
+        //     var curLeft = wrap.scrollLeft;
+        //     wrap.scrollLeft = curLeft + 1;
+        //     var newLeft = wrap.scrollLeft;
+        //     if (curLeft === newLeft) {
+        //         // window.clearInterval(timer);
+        //         wrap.scrollLeft = 0; //这里虽然重头开始了，但是有个一个闪动的效果
+        //     }
+        //     console.log("ok");
+        // }, 10)
+
+
+
+        // 跑马灯效果二，有连续的效果，并且避免了闪动的动画
+        // var  conBegin_width = getCss2SS(conBegin, 'width'); //因为css并没有人为设置其宽度，所以要通过这种方式获取
+        // var timer = window.setInterval(function () {
+        //     var curLeft = wrap.scrollLeft++;
+        //     if (curLeft >= conBegin_width) {
+        //         wrap.scrollLeft = 0;
+        //     }
+        // }, 10);
+
+
+        // 跑马灯效果三，鼠标经过，滚动停止
+        ~function() { // 为了和其他的全局变量冲突，形成一个私有的作用域，把代码整体包起来
+            var  conBegin_width = getCss2SS(conBegin, 'width'); //因为css并没有人为设置其宽度，所以要通过这种方式获取
+            function move() {
+                var curLeft = wrap.scrollLeft++;
+                if (curLeft >= conBegin_width) {
+                    wrap.scrollLeft = 0;
+                }
+            }
+            var timer = window.setInterval(move, 10);
+            box.onmouseover = function() {
+                window.clearInterval(timer);
+            }
+            box.onmouseout = function() {
+                timer = window.setInterval(move, 10);
+            }
+        }()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        function getCss2SS(curEle, attr) {
+            var val = null, reg = null;
+            if ('getComputedStyle' in window) {
+                val = window.getComputedStyle(curEle, null)[attr];
+            } else {
+                if (attr === 'opacity') {
+                    val = curEle.currentStyle[attr]; // ->返回 alpha(opacity=10)
+                    reg = /^alpha\(opacity=(\d+(?:\.\d+)?)\)$/i;  //  获取10这个数字
+                    val = reg.test(val)?reg.exec(val)[1]/100:1  // 超厉害，test与exec一起使用！！！
+                }
+                val = curEle.currentStyle[attr];
+            }
+            reg = /^-?\d+(\.\d+)?(px|pt|rem|em)?$/i; //匹配的情况：纯数值或者带单位的数值
+            return reg.test(val) ? parseFloat(val) : val;
+        }
+    </script>
+</body>
+</html>

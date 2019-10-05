@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据绑定及dom回流</title>
+</head>
+<body>
+<ul id="ul1">
+    <li><span class="bg">1</span>黑夜到白昼</li>
+    <li><span class="bg">2</span>十五楼</li>
+    <li><span class="bg">3</span>真的没有没有</li>
+</ul>
+</body>
+<script type="text/javascript" src="js/json-bind.js"></script>
+<script type="text/javascript">
+    var oUl = document.getElementById('ul1');
+    var oLis = oUl.getElementsByTagName('li');
+    for (var i = 0; i < oLis.length; i++) {
+        oLis[i].onmouseover = function() {
+            this.style.backgroundColor = 'pink';
+        };
+        oLis[i].onmouseout = function() {
+            this.style.backgroundColor = '';
+        };
+    }
+    // 动态添加json数据绑定到html中，共有三种方法
+    // 1、利用动态创建元素节点和把它追加到页面中的方式实现数据绑定
+    // for (var i = 0; i < ary.length; i++) {
+    //     var cur = ary[i];
+    //     var oLi = document.createElement('li');
+    //     oLi.innerHTML = '<span>' + (i+4) + '</span>' + cur.title;
+    //     oUl.appendChild(oLi);
+    // }
+    // 优势：把需要动态绑定的内容一个个的追加到页面中，对原来的元素没有任何影响（绑定的事件）
+    // 弊端：每当创建一个li，我们就添加到页面中，引发一次dom回流，最后引发回流的次数过多，影响我们的性能
+
+    // 2、字符串拼接的方式（数据绑定中最常用的方式）
+    // 原理：首先循环需要绑定的数据，然后把需要动态绑定的标签以字符串的方式拼接到一起，拼接完成后，最后统一添加到页面中
+    // var str = '';
+    // for (var i = 0; i < ary.length; i++) {
+    //     var cur = ary[i];
+    //     str += '<li>';
+    //     str += '<span>' + (i+4) + '<span>';
+    //     str += cur.title;
+    //     str += '</li>';
+    // }
+    // oUl.innerHTML += str;
+    // 优势：数据绑定最常用的方式，因为浏览器只需要渲染一次（所有模板引擎数据绑定的原理就是字符串拼接，vue、angular、jade、kTemplate.js等等）
+    //      事先把内容拼接好，最后统一添加到页面中，只引发一次回流
+
+    // 弊端：我们把新凭借的字符串添加到#ul1中，原有的三个li的鼠标滑过效果都消失了（原来标签绑定的事件都消失了）
+    // 原来，oUl.innerHTML的作用是把原来的标签以字符串的方式取出，原来作为标签的时候，对应事件绑定的东西已经没有了，然后进行字符串拼接，
+    // 但是，拼接完成之后，还是字符串！最后再把字符串统一添加到页面中，浏览器还需要把字符串渲染成为对应的标签
+
+
+    // dom深入知识
+    // ->回流(重拍、reflow)：当页面中的HTML结构发生改变（增加、删除元素、位置发生改变...），浏览器都需要重新计算一遍最新的dom结构，重新对当前的页面进行渲染
+    // ->重绘：某一元素的部分样式发生了改变（背景颜色，浏览器只需要重新渲染当前元素即可）
+
+
+    // 3、文档碎片（不影响原来的事件绑定，并且只引发一次dom回流，综合了1、2优点）
+    var frg = document.createDocumentFragment(); //-> 创建一个文档碎片，相当于临时创建一个容器
+    for (var i = 0; i < ary.length; i++) {
+        var cur = ary[i];
+        var oLi = document.createElement('li');
+        oLi.innerHTML = '<span>' + (i+4) + '</span>' + cur.title;
+        // oUl.appendChild(oLi);
+        frg.appendChild(oLi);
+    }
+    oUl.appendChild(frg); // appendChild对原来的标签不产生任何影像
+    frg = null; // 手动释放堆内存
+</script>
+</html>

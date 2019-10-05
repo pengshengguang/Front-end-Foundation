@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表格排序及dom映射</title>
+</head>
+<body>
+<ul id="ul1">
+    <li>98</li>
+    <li>96</li>
+    <li>99</li>
+    <li>95</li>
+    <li>90</li>
+</ul>
+</body>
+<script type="text/javascript" src="js/utils.js"></script>
+<script type="text/javascript">
+    // 需求：把页面中的html结构按某一规律进行升降序排序，称表格排序
+
+    // 1、获取页面元素
+    debugger;
+    var oUl = document.getElementById('ul1');
+    var oLis = oUl.getElementsByTagName('li'); //oLis是元素集合类数组
+    // 2、对oLis进行sort排序
+    // 由于oLis是类数组 ，想要用到sort，必须将类数组转化为数组
+    var ary = utils.listToArray(oLis);
+    ary.sort(function(a, b) {
+        return parseFloat(a.innerHTML) - parseFloat(b.innerHTML);
+    });
+    // 3、按照ary中存储的最新顺序依次把对应的li添加到页面当中
+    var frg = document.createDocumentFragment();
+    for (var i = 0; i < ary.length; i++) {
+        frg.appendChild(ary[i]);
+    }
+    oUl.appendChild(frg);
+    frg = null;
+
+    // 做到这里，看页面，奇怪的地方就来了，正常来说appendChild(frg)，也就是给原来的ul追加5个li，一共有10个li
+    // 才对，但是现在还是只有5个li，灰常奇怪！
+
+
+    // 这就涉及到dom的映射（引用地址，类似于对象）
+    // 页面中的标签和JS标签中获取到的元素对象（元素集合）是紧紧绑定到一起的，页面中的HTML结构改变了，JS不需要
+    // 重新获取，集合里面的内容也会跟着自动改变
+
+
+    // 怎么理解呢，看下面例子
+    console.log(oLis.length); // ->5
+    var oLi = document.createElement("li");
+    oUl.appendChild(oLi);
+    console.log(oLis.length); // ->6  这就是dom映射，我并没重新获取oLi，但是长度却由5变成6了
+</script>
+</html>

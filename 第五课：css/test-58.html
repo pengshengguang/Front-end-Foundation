@@ -43,6 +43,7 @@
             display: none;
             width: 100%;
             height: 100%;
+            opacity: 0;  /*这里设置为0的目的是，实现渐进的效果，后面的fadeIn函数，作用就是让图片透明都从0变成1*/
         }
 
         .news li > div:nth-child(2) {
@@ -66,15 +67,15 @@
 </head>
 <body>
     <ul id="news" class="news">
-        <li>
-            <div>
-                <img src="./img/new1.PNG" alt="">
-            </div>
-            <div>
-                <h2>香港四大家族往事,香港四大家族往事,香港四大家族往事</h2>
-                <p>香港四大家族往事：李嘉诚为郑裕彤扶灵香港四大家族往事：李嘉诚为郑裕彤扶灵</p>
-            </div>
-        </li>
+        <!--<li>-->
+            <!--<div>-->
+                <!--<img src="./img/new1.PNG" alt="">-->
+            <!--</div>-->
+            <!--<div>-->
+                <!--<h2>香港四大家族往事,香港四大家族往事,香港四大家族往事</h2>-->
+                <!--<p>香港四大家族往事：李嘉诚为郑裕彤扶灵香港四大家族往事：李嘉诚为郑裕彤扶灵</p>-->
+            <!--</div>-->
+        <!--</li>-->
     </ul>
 
 
@@ -82,13 +83,16 @@
 
 <script type="text/javascript" src="./tool/utils.js"></script>
 <script type="text/javascript">
+    var news = document.getElementById("news"),
+        imgList = news.getElementsByTagName("img");
+
     // 1、获取需要绑定的数据(通过Ajax)
     var jsonData = null;
     ~function () {
         var xhr = new XMLHttpRequest;
         // URL地址后面加随机数目的：清除每一次请求数据时候（get请求）产生的缓存
         // 因为每次访问的地址不一样，样浏览器就不会尝试缓存来自服务器的响应，读取本地缓存的数据。
-        xhr.open('get', 'json/newsList.txt?' + Math.random(), false);
+        xhr.open('get', 'json/newsList.txt?' + Math.random(), false); // false代表同步
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && /^2\d{2}$/.test(xhr.status)) {
                 var val = xhr.responseText;
@@ -98,6 +102,80 @@
         xhr.send(null);
     }();
     console.log(jsonData);
+
+    // 2、数据绑定（使用字符串拼接的方式）
+    ~function () {
+        var str = "";
+        if (jsonData) {
+            for (var i = 0, len = jsonData.length; i < len; i++) {
+                var curData = jsonData[i];
+                str += '<li>';
+                str += '<div><img src="" trueImg="' + curData["img"] + '"></div>';
+                str += '<div><h2>' + curData["title"] + '</h2>';
+                str += '<p>' + curData["desc"] + '</p>';
+                str += '</div>';
+                str += '</li></div>';
+            }
+            news.innerHTML += str;
+        }
+    }();
+
+    // 3、图片延迟加载
+    // ->首先实现单张图片的延时加载
+    function lazyImg(curImg) {
+        var oImg = new Image;
+        oImg.src = curImg.getAttribute("trueImg");
+        oImg.onload = function() {
+            curImg.src = this.src;
+            curImg.style.display = "block";
+            fadeIn(curImg);
+            oImg = null;
+        }
+        curImg.isLoad = true;
+    }
+
+    // -> 循环处理每一张图片
+    function handleAllImg() {
+        for (var i = 0, len = imgList.length; i < len; i++) {
+            var curImg = imgList[i];
+            if (curImg.isLoad) { // 当前图片处理过的话，就不需重新进行处理
+                continue;
+            }
+
+            // ->只有当A小于B的时候再进行处理
+//          var A = utils.offset(curImg).top + curImg.offsetHeight; // 这里A不能这么计算，因为此时图片是隐藏的，没有图片，他的offsetHeight当让也是为0
+                                                                      // 如果我要的到图片的A值，我们可以通过拿到他父节点的容器就行了，哈哈
+            var curImgPar = curImg.parentNode,
+                A = utils.offset(curImgPar).offsetTop + curImgPar.offsetHeight,
+                B = utils.win("clientHeight") + utils.win("scrollTop");
+            if (A < B) {
+                lazyImg(curImg);
+            }
+        }
+    }
+
+    // ->实现渐现效果
+    function fadeIn(curImg) {
+        var duration = 500, // 总时间
+            interval = 10, //10ms走一次
+            target = 1; //总距离是1
+        var step = (target / duration) * interval; //每一步的步长
+        var timer = window.setInterval(function () {
+            var curOp =  utils.getCss2SS(curImg, "opacity");
+            if (curOp >= 1) {
+                  curImg.style.opacity = 1;
+                  window.clearInterval(timer);
+                  return
+            }
+            curOp += step;
+            curImg.style.opacity = curOp;
+        }, interval);
+    }
+
+    // 4、开始的时候（过500ms）加载1屏幕的图片，当滚动条滚动的时候，加载其他图片
+    window.setTimeout(handleAllImg, 500);
+    window.onscroll = handleAllImg;
+
 
 </script>
 </body>

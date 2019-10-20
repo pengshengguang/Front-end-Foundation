@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>内置的dom操作属性和方法</title>
+</head>
+<body>
+<div id="div1">
+    <span></span>
+    <span></span>
+    <span></span>
+    <p>
+        <span></span>
+        <span></span>
+    </p>
+</div>
+<script type="text/javascript">
+    // ->获取页面中元素的方法
+    //getElementById();
+    //getElementsByTagName();
+    //getElementsByTagName();
+    //getElementsByClassName(); // ->在IE6-8下不兼容
+    //getElementsByName(); // ->在IE浏览器中只对表单元素的name起作用
+    //document.body;
+    //document.documentElement;
+    //document.querySelector(); // ->在IE6-8下不兼容，通过获取的节点集合不存在document关系
+    //document.querySelectorAll();
+
+    // -> 描述节点和节点之间关系的属性（在标准浏览器中会把空格和换行当做文本节点处理）
+    //document.body.childNodes; // ->获取元素子节点
+    //document.body.children; // ->在IE6-8下获取的结果和标准浏览器获取的结果不一致
+    //document.body.parentNode; // ->父亲节点
+    //document.body.previousSibling; // ->获取上一个哥哥节点
+    //document.body.previousElementSibling; // ->获取上一个哥哥元素节点
+    //document.body.nextSibling; // ->获取上一个弟弟节点
+    //document.body.nextElementSibling; // ->获取上一个弟弟元素节点
+    //document.body.lastElementChild; // ->获取最后一个元素子节点
+    //document.body.firstElementChild; // ->获取第一个元素子节点
+
+    // ->DOM的增删改
+    //createElement();
+    //createDocumentFragment();
+    //appendChild();
+    //insertBefore();
+    //cloneNode(true/false)
+    //removeChild();
+    //removeChild();
+    //get/set/removeAttribute
+
+    // ->DOM盒子模型 13个
+    //clientHeight/Width
+    //clientLeft/Top
+    //offsetHeight/Width
+    //offsetLeft/Top
+    //offsetParent
+    //scrollHeight/Width
+    //scrollLeft/Top
+
+
+    var oDiv = document.getElementById("div1");
+
+    // ->接下来写的所有方法在JQuery中的作用和方法名字一模一样 (上面的描述节点与节点之间关系的兼容)
+    // ->function children ->获取某一个容器中所有的元素子节点（还可以筛选出制定标签名的）
+    // ->getElementsByClass ->通过元素的样式类名获取一组元素（兼容所有浏览器）（JQuery中没有此方法名，但是JQuery的的一部分
+    //                      选择器也是基于这个方法的原理来实现）
+    // ->获取上一个元素节点（prev），获取下一个弟弟元素节点（next），获取所有哥哥元素节点（preAll），获取所有的弟弟元素节点（nextAll），
+    //   获取相连的两个元素节点（sibling），获取所有的兄弟节点（siblings）
+    // ->获取第一个元素子节点（firstChild），获取最后一个元素子节点（lastChild）   【这两个方法JQuery中也没有】
+    // ->index获取当前元素索引
+
+    // prepend ->和appendChild对应,增加到某一个容器的开头
+    // insertAfter ->和insertBefore对应，增加到容器中某一个元素的后面
+
+    // addClass 增加样式类名
+    // removeClass 删除样式类名
+    // hasClass 判断是否存在某一个样式类名
+
+    // ->下面这三个在JQuery中，统一可以用css方法
+    // getCss 获取样式
+    // setCss   设置样式
+    // setGroupCss  批量设置样式
+
+    // ->基于内置类的原先扩展一些我们常用的方法
+
+
+    // 总结一下上面的方法，后面的文件就是讲怎么实现这些方法
+
+</script>
+</body>
+</html>

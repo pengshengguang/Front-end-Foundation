@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>获取所有的元素子节点</title>
+</head>
+<body>
+<div id="div1">
+    <div></div>
+    <div></div>
+    <div>
+        <p></p>
+        <p></p>
+    </div>
+    <!--哈哈哈-->
+    <p></p>
+    <p></p>
+    <p></p>
+    
+</div>
+<script type="text/javascript">
+    var oDiv = document.getElementById("div1");
+    console.log(oDiv.children) // IE6-8 : ->7     IE9以上 : ->6
+
+    // 获取当前容器下面的元素子节点（谷歌浏览器直接用children就行了，不用考虑兼容问题）
+    function children(curEle, tagName) {
+        // 首先获取所有的子节点（childNodes）
+        // 再所有的子节点中，把元素节点过滤出来（nodeType ===1）
+        var ary = [];
+        if (/MSIE (6|7|8)/i.test(navigator.userAgent)) { //IE6-8不能使用内置的children属性，需要自己写代码实现
+            var nodeList = curEle.childNodes;
+            for (var i = 0, len = nodeList.length; i < len; i++) {
+                var curNode = nodeList[i];
+                if (curNode.nodeType === 1) {
+                    ary[ary.length] = curNode;
+                }
+            }
+        } else { //->标准浏览器中，我们直接使用children即可，但是这样获取的是一个元素集合（类数组），为了和IE6-8下保持一直
+                  // 我们接祖数组原型上面的slice，实现把类数组转为数组
+//          ary = curEle.children; 不能这样返回，因为这样返回的是类数组而不是数组
+            ary = Array.prototype.slice.call(curEle.children);
+        }
+
+        //-> 二次筛选
+        if (typeof tagName === "string") {
+            for (var k = 0; k < ary.length;  k++) {
+                var curEleNode = ary[k];
+                if (curEleNode.nodeName.toLowerCase() !== tagName.toLowerCase()) {
+                    // ->不是我想要的标签
+                    ary.splice(k, 1);
+                    k--;
+                }
+            }
+        }
+
+        return ary
+    }
+    console.log(children(oDiv, "p"));
+</script>
+</body>
+</html>

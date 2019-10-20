@@ -1,8 +1,14 @@
 // 配合test-26.js 、 test-28.js
 // 为了与全局变量冲突，我们使用单例模式
-var utils = {
+
+// 使用惰性思想（JS高阶编程技巧之一）来封装我常用的方法库
+// 第一次再给utils赋值的时候我们就已经把兼容处理好了，把最后的结构存放在flag变量中，以后在每一个方法中，只要是IE6-8不兼容的，我们不需要重新检测，只需要使用flag
+// 的值即可
+var utils = (function() {
+    var flag = "getComputedStyle" in window; // ->flag这个变量不销毁，存储的是判断当前的浏览器是否兼容getComputedStyle，兼容的话是标准浏览器，否则是IE6-8
+
     // 实现将类数组转化为数组方法（同时兼容非标准浏览器）
-    listToArray: function(likeAry)   {
+    function listToArray(likeAry)   {
         var ary = [];
         try {
             ary = Array.prototype.slice.call(likeAry);
@@ -12,9 +18,10 @@ var utils = {
             }
         }
         return ary;
-    },
+    }
+
     // jsonParse: 把JSON格式的字符串转化为JSON格式的对象
-    jsonParse: function (str) {
+    function jsonParse(str) {
         var val = null;
         try {
             val = JSON.parse(str);
@@ -22,9 +29,9 @@ var utils = {
             val = eval('(' + str + ')');
         }
         return val;
-    },
+    }
 
-    getCss2SS : function(curEle, attr) {
+    function getCss2SS(curEle, attr) {
         var val = null, reg = null;
         if ('getComputedStyle' in window) {
             val = window.getComputedStyle(curEle, null)[attr];
@@ -38,9 +45,9 @@ var utils = {
         }
         reg = /^-?\d+(\.\d+)?(px|pt|rem|em)?$/i; //匹配的情况：纯数值或者带单位的数值
         return reg.test(val) ? parseFloat(val) : val;
-    },
+    }
 
-    offset : function(curEle) {
+    function offset(curEle) {
         var totalLeft = null,
             totalTop = null,
             par = curEle.offsetParent;
@@ -64,18 +71,19 @@ var utils = {
         result.offsetTop = totalTop;
         result.offsetLeft = totalLeft;
         return result;
-    },
+    }
 
-    win : function(attr, value) {
+    function win(attr, value) {
         if (value === undefined) {
             return document.documentElement[attr] || document.body[attr];
         }
         document.documentElement[attr] = value;
         document.body[attr] = value;
-    },
+    }
+
     // 获取当前容器下面的元素子节点（谷歌浏览器直接用children就行了，不用考虑兼容问题）
     // 如果只传递tagName，可以在获取集合中进行二次筛选
-    children: function (curEle, tagName) {
+    function children(curEle, tagName) {
         // 首先获取所有的子节点（childNodes）
         // 再所有的子节点中，把元素节点过滤出来（nodeType ===1）
         var ary = [];
@@ -90,7 +98,7 @@ var utils = {
             // 我们接祖数组原型上面的slice，实现把类数组转为数组
             // ary = curEle.children; 不能这样返回，因为这样返回的是类数组而不是数组
             ary = this.listToArray(curEle.childNodes); // 为什么可以this就调用utils呢，因为，你想调用children这个方法，你必须
-                                                         // 得utils.children()这样调用，所以this就是等于utils
+            // 得utils.children()这样调用，所以this就是等于utils
         }
 
         //-> 二次筛选
@@ -107,4 +115,13 @@ var utils = {
 
         return ary
     }
-};
+
+    return {
+        listToArray:listToArray,
+        jsonParse: jsonParse,
+        getCss2SS : getCss2SS,
+        offset : offset,
+        win : win,
+        children: children
+    }
+})();

@@ -116,12 +116,103 @@ var utils = (function() {
         return ary
     }
 
+    // ->prev: 获取上一个哥哥元素节点
+    // ->首先获取当前元素的上一个哥哥节点，判断是否为元素节点，不是的话基于当前继续找上面的哥哥节点，一直找到元素哥哥节点为止，如果没有返回null即可
+    function prev(curEle) {
+        if (flag) {
+            return curEle.previousElementSibling;
+        }
+        var pre = curEle.previousSibling;
+        while (pre && pre.nodeType !== 1) { //nodeType: 1->代表元素；2->代表属性；3->代表文本内容
+            pre = pre.previousSibling;
+        }
+        return pre;
+    }
+
+    // ->next：获取下一个弟弟元素节点
+    function next(curEle) {
+        if (flag) {
+            return curEle.previousElementSibling;
+        }
+        var next = curEle.nextSibling;
+        while (next && next.nodeType != 1) {
+            next = next.nextSibling;
+        }
+        return next;
+    }
+
+    // ->prevAll: 获取所有哥哥元素节点
+    function preAll(curEle) {
+        var ary = [];
+        var pre = this.prev(curEle);
+        while (pre) {
+            // ary.push(pre); // 这里不能用push，因为这样顺序就会颠倒
+            ary.unshift(pre); // 每一次添加都放在最开头
+            pre = this.prev(pre);
+        }
+        return ary;
+    }
+
+    // ->nextAll: 获取所有弟弟元素节点
+    function nextAll(curEle) {
+        var ary = [];
+        var next = this.next(curEle);
+        while (next) {
+            ary.push(next);
+            next = this.next(next);
+        }
+        return ary;
+    }
+
+    // ->sibling: 获取相邻的两个元素节点
+    function sibling(curEle) {
+        var ary = [];
+        var pre = this.prev(curEle);
+        var next = this.next(curEle);
+        pre ? ary.push(pre) : null;
+        next ? ary.push(next) : null;
+        return ary;
+    }
+
+    // ->siblings: 获取所有的元素节点（即所有的哥哥+所有的弟弟）
+    function siblings(curEle) {
+        return this.preAll(curEle).concat(this.nextAll(curEle));
+    }
+
+    // -> index: 获取当前元素索引
+    function index(curEle) {
+        return this.preAll(curEle).length;
+    }
+
+    // -> firstChild: 获取当前元素的第一个元素子节点
+    function firstChild(curEle) {
+        var childs = this.children(curEle);
+        return childs.length > 0 ? childs[0] : null;
+    }
+
+    // -> lastChild: 获取当前元素的最后一个元素子节点
+    function lastChild(curEle) {
+        var childs = this.children(curEle);
+        return childs.length > 0 ? childs[childs.length - 1] : null;
+    }
+
     return {
         listToArray:listToArray,
         jsonParse: jsonParse,
         getCss2SS : getCss2SS,
         offset : offset,
         win : win,
-        children: children
+
+        // 获取兄弟元素节点系列方法
+        children: children,
+        prev: prev,
+        next: next,
+        preAll: prevAll,
+        nextAll: nextAll,
+        sibling: sibling,
+        siblings: siblings,
+        firstChild: firstChild,
+        lastChild: lastChild,
+
     }
 })();

@@ -89,20 +89,24 @@
     // 1、获取需要绑定的数据(通过Ajax)
     var jsonData = null;
     ~function () {
+        // 1)首先创建一个Ajax对象
         var xhr = new XMLHttpRequest;
+        // 2)打开我们需要请求的数据的那个文件地址
         // URL地址后面加随机数目的：清除每一次请求数据时候（get请求）产生的缓存
         // 因为每次访问的地址不一样，样浏览器就不会尝试缓存来自服务器的响应，读取本地缓存的数据。
         xhr.open('get', 'json/newsList.txt?' + Math.random(), false); // false代表同步
+        // 3)监听请求的状态
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && /^2\d{2}$/.test(xhr.status)) {
                 var val = xhr.responseText;
                 jsonData = utils.jsonParse(val);
             }
         }
+        // 4)发送请求
         xhr.send(null);
     }();
     console.log(jsonData);
-
+    xhr.open('get', 'json/newsList.txt?' + Math.random(), false); // false代表同步
     // 2、数据绑定（使用字符串拼接的方式）
     ~function () {
         var str = "";
@@ -175,7 +179,6 @@
     // 4、开始的时候（过500ms）加载1屏幕的图片，当滚动条滚动的时候，加载其他图片
     window.setTimeout(handleAllImg, 500);
     window.onscroll = handleAllImg;
-
 
 </script>
 </body>

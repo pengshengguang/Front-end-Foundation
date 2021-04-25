@@ -66,17 +66,17 @@
     </style>
 </head>
 <body>
-    <ul id="news" class="news">
-        <!--<li>-->
-            <!--<div>-->
-                <!--<img src="./img/new1.PNG" alt="">-->
-            <!--</div>-->
-            <!--<div>-->
-                <!--<h2>香港四大家族往事,香港四大家族往事,香港四大家族往事</h2>-->
-                <!--<p>香港四大家族往事：李嘉诚为郑裕彤扶灵香港四大家族往事：李嘉诚为郑裕彤扶灵</p>-->
-            <!--</div>-->
-        <!--</li>-->
-    </ul>
+<ul id="news" class="news">
+    <!--<li>-->
+    <!--<div>-->
+    <!--<img src="./img/new1.PNG" alt="">-->
+    <!--</div>-->
+    <!--<div>-->
+    <!--<h2>香港四大家族往事,香港四大家族往事,香港四大家族往事</h2>-->
+    <!--<p>香港四大家族往事：李嘉诚为郑裕彤扶灵香港四大家族往事：李嘉诚为郑裕彤扶灵</p>-->
+    <!--</div>-->
+    <!--</li>-->
+</ul>
 
 
 
@@ -144,7 +144,7 @@
 
             // ->只有当A小于B的时候再进行处理
 //          var A = utils.offset(curImg).top + curImg.offsetHeight; // 这里A不能这么计算，因为此时图片是隐藏的，没有图片，他的offsetHeight当让也是为0
-                                                                      // 如果我要的到图片的A值，我们可以通过拿到他父节点的容器就行了，哈哈
+            // 如果我要的到图片的A值，我们可以通过拿到他父节点的容器就行了，哈哈
             var curImgPar = curImg.parentNode,
                 A = utils.offset(curImgPar).offsetTop + curImgPar.offsetHeight,
                 B = utils.win("clientHeight") + utils.win("scrollTop");
@@ -163,9 +163,9 @@
         var timer = window.setInterval(function () {
             var curOp =  utils.getCss2SS(curImg, "opacity");
             if (curOp >= 1) {
-                  curImg.style.opacity = 1;
-                  window.clearInterval(timer);
-                  return
+                curImg.style.opacity = 1;
+                window.clearInterval(timer);
+                return
             }
             curOp += step;
             curImg.style.opacity = curOp;

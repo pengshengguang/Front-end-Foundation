@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>浮动布局</title>
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .content > div{
+            min-height: 100px;
+        }
+        .content .left{
+            float: left;
+            width: 100px;
+            background: red;
+        }
+        .content .right{
+            float: right;
+            width: 100px;
+            background: blue;
+        }
+        .content .center{
+            background: yellow;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <div class="left"></div>
+    <div class="right"></div>
+    <div class="center">
+        <h1>我是中间部分</h1>
+        <h1>我是中间部分</h1>
+        <h1>我是中间部分</h1>
+        <h1>我是中间部分</h1>
+    </div>
+</div>
+</body>
+</html>

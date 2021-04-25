@@ -3,7 +3,7 @@ var obj = {
     num: 30,
     fn: (function (num) { // num -> window.num  这一步错了，num是立即执行函数的私有变量，即为20
         this.num *= 3; // this -> window -> window.num = 20 * 3 = 60
-        num += 15; // nu    m -> window.num = 60 + 15 = 75    这一步也错了，num是私有变量20，所以num -> me.num = 20 + 15 = 35
+        num += 15; // num -> window.num = 60 + 15 = 75    这一步也错了，num是私有变量20，所以num -> me.num = 20 + 15 = 35
         var num =45; // 因为私有变量num已经在私有变量变量赋值阶段已经声明了并赋值了，所以这个var num不需要预解释，直接覆盖形参，所以num -> me.num = 45
         return function () {
             this.num *= 4;

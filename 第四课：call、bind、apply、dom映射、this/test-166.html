@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>166-167课，回调函数与柯里化函数思想</title>
+    <link type="text/css" rel="stylesheet" href="css/tab.css">
+</head>
+<body>
+<div class="box">
+</div>
+<script type="text/javascript" charset="utf-8" >
+    //forEarch、map 都在ie6-8中兼容
+    var obj = {"name": 'ps'};
+    var arr = [1,2,3,4,5,6,7];
+    arr.forEach(function(item,index,input) {
+        console.log(this)
+    }, obj)
+    //1、实现forEach
+    Array.prototype.myForEach = function(callback, context) {
+        context = context || window;
+        if ('forEach' in Array.prototype) {
+            this.forEach(callback, context);
+            return
+        }
+        // IE6-8自己编写回调执行的逻辑
+        for (var i = 0; i < this.length; i++) {
+            callback && callback(this[i], i, this);
+        }
+    }
+    arr.myForEach(function(item,index,input) {
+        console.log(item,index, input);
+        console.log(this);
+    }, obj)
+
+    // 2、实现map
+    Array.prototype.myMap = function(callback, context) {
+        context = context || window;
+        // if ('myMap' in Array.prototype) {
+        //     return this.map(callback, context);
+        // }
+        var resAry = []
+        // IE6-8自己编写回调执行的逻辑
+        for (var i = 0; i < this.length; i++) {
+            var item = callback && callback(this[i], i, this);
+            resAry.push(item);
+        }
+        return resAry;
+    }
+    var newArr = arr.myMap(function(item, index, input) {
+        return item * 10;
+    })
+    console.log(newArr);
+
+    // 柯里化函数思想：一个JS预先处理的思想
+    var obj = {"name":"psg"};
+    function fn(num1, num2) {
+        console.log(this, num1, num2);
+    }
+    window.setTimeout(fn(1,2),0);
+    window.setTimeout(fn.bind(obj,1,2),0);
+    // 3、实现bind
+    Function.prototype.myBind = function (context) {
+        var _this = this;
+        var outerArg = Array.prototype.slice.call(arguments, 1)
+        if ("bind" in Function.prototype) {
+            return this.bind(this, [context].concat(outerArg))
+        }
+
+        return function () {
+            var innerArg = Array.prototype.slice.call(arguments, 0)
+            _this.apply(context, innerArg.concat(outerArg))
+        }
+
+    }
+    window.setTimeout(fn.myBind(obj,1,2),0);
+
+
+
+</script>
+
+</body>
+</html>

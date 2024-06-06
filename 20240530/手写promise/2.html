@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <title>2</title>
+  </head>
+  <body>
+  </body>
+  <script>
+    // let promise = new Promise((resolve, reject) => {
+    //   resolve('解决')
+    // })
+    // let p = promise.then(value => {
+    //   return p // 不允许返回自己
+    // })
+
+    // Promise.resolve('后盾人').then(value => {
+    //   console.log(value)
+    // })
+    // Promise.reject('后盾人').then(null, reason => {
+    //   console.log(reason)
+    // })
+
+    // all
+    let p1 = new Promise((resolve, reject) => {
+      resolve('p1-解决')
+    })
+    let p2 = new Promise((resolve, reject) => {
+      reject('p2-拒绝')
+    })
+    Promise.all([p1, p2]).then(value => {
+      console.log(value)
+    }, reason => {
+      console.log(reason)
+    })
+  </script>
+</html>

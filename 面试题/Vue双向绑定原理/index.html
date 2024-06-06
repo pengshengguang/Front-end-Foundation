@@ -1,0 +1,40 @@
+<!--
+ * @Description: 
+ * @version: 
+ * @Author: PSG
+ * @Date: 2021-10-27 15:18:39
+ * @LastEditors: PSG
+ * @LastEditTime: 2021-10-27 16:43:03
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id='app'>
+    {{str}}
+    <h1>{{str}}</h1>
+    <button @click="btn">按钮</button>
+    <input type="text" v-model="str">
+  </div>
+
+  <script type="text/javascript" src="vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        str: '你好'
+      },
+      methods: {
+        btn(e) {
+          console.log(this.str, this)
+        }
+      }
+    })
+  </script>
+</body>
+</html>

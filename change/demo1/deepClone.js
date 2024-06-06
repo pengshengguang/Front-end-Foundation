@@ -1,8 +1,16 @@
+/*
+ * @Description: 
+ * @version: 
+ * @Author: PSG
+ * @Date: 2021-04-25 13:58:40
+ * @LastEditors: PSG
+ * @LastEditTime: 2021-09-19 17:14:07
+ */
 var arr = [1,2,3,4,5,6,7]
 var copyArr = deepClone(arr);
 console.log(copyArr);
 function deepClone(obj) {
-    if (typeof obj !== 'object' || typeof obj == null) {
+    if (typeof obj !== 'object' || obj == null) {
         return obj;
     }
     // 初始化返回结果

@@ -1,0 +1,119 @@
+<html>
+  <head>
+    <title>1</title>
+    <script src="index.js"></script>
+  </head>
+  <body>
+  </body>
+  <script>
+    // 最常规的
+    // let p = new HD((resolve, reject) => {
+    //   resolve('解决')
+    // }).then(value => {
+    //   console.log(value)
+    // }, reason => {
+    //   console.log(reason)
+    // })
+
+    // let p = new HD((resolve, reject) => {
+    //   // resolve('解决') // 这里我们手动改变了promise的状态，但是then返回的是新promise，因此Promose源码里面的then里面要自己实现改动prmise的状态
+    //   // reject('拒绝')
+    //   setTimeout(() => {
+    //     // resolve('解决')
+    //     reject('拒绝')
+    //   }, 1000)
+    // })
+    //   .then(value => {
+    //     // return '向军大叔' // return 普通的值
+    //     return new HD((resolve, reject) => { // return promise对象
+    //       // resolve('p1向军大叔')
+    //       reject('p2向军大叔')
+    //     })
+    //   }, reason => {
+    //     return new HD((resolve, reject) => { // return promise对象
+    //       // resolve('p1向军大叔')
+    //       reject('p2向军大叔')
+    //     })
+    //   })
+    //   .then(value => {
+    //     console.log('fulfilled: ' + value)
+    //   }, reason => {
+    //     console.log('rejected ' + reason)
+    //   })
+
+
+    // 不允许返回自己p
+    // let promise = new HD((resolve, reject) => {
+    //   resolve('解决')
+    // })
+    // let p = promise.then(value => {
+    //   return p
+    // })
+    // console.log(p)
+
+    // 静态方法resolve
+    // 情况一：简单值
+    // HD.resolve('后盾人').then(value => {
+    //   console.log(value)
+    // })
+    // 情况二：promise
+    // let p = new HD((resolve, reject) => {
+    //   resolve('解决')
+    //   // reject('拒绝')
+    // })
+    // HD.resolve(p).then(value => {
+    //   console.log(value)
+    // }, reason => {
+    //   console.log(reason)
+    // })
+
+    // 静态方法reject
+    // 情况一：简单值
+    // HD.reject('失败').then(null, reason => {
+    //   console.log(reason)
+    // })
+    // // 情况二：promise
+    // let p = new HD((resolve, reject) => {
+    //   // resolve('解决')
+    //   reject('拒绝')
+    // })
+    // HD.reject(p).then(value => {
+    //   console.log(value)
+    // }, reason => {
+    //   console.log(reason)
+    // })
+
+
+    // all
+    // let p1 = new HD((resolve, reject) => {
+    //   resolve('p1-解决')
+    // })
+    // let p2 = new HD((resolve, reject) => {
+    //   resolve('p2-解决')
+    //   reject('p2-拒绝')
+    // })
+    // HD.all([p1, p2]).then(value => {
+    //   console.log(value)
+    // }, reason => {
+    //   console.log(reason)
+    // })
+
+    // race
+    let p1 = new HD((resolve, reject) => {
+      setTimeout(() => {
+        resolve('p1-解决')
+      }, 2000)
+    })
+    let p2 = new HD((resolve, reject) => {
+      setTimeout(() => {
+        resolve('p2-解决')
+      // reject('p2-拒绝')
+      }, 1000)
+    })
+    HD.race([p1, p2]).then(value => {
+      console.log(value)
+    }, reason => {
+      console.log(reason)
+    })
+  </script>
+</html>

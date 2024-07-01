@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // // 1、函数作为返回值被返回
+    // function create () {
+    //   let a = 100
+    //   return function () {
+    //     console.log(a) // 此时，a作为自由变量，它的值应该往上一层寻找，也就是说a = 100
+    //   }
+    // }
+    // const fn = create()
+    // const a = 200
+    // fn() // 100
+
+    // 2、函数作为参数被传递
+    function print (fn) {
+      const a = 200
+      fn()
+    }
+    const a = 100
+    function fn () {
+      console.log(a) // 100    !!!!!!!!!!!!我之前做错了！！！！
+    }
+    print(fn)
+  </script>
+</body>
+</html>

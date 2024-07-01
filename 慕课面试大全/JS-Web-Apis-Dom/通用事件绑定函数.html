@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button id="btn1">按钮</button>
+  <ul id="div3">
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+    <li>6</li>
+    <li>7</li>
+  </ul>
+  <button>加载更多</button>
+
+  <script>
+    // 通用事件绑定函数
+    function bindEvent(elem, type, selector, fn) {
+      if (fn == null) { // 注意，这里是用 ==        解决3个参数还是4个参数的问题，牛逼牛逼！！！！！
+        fn = selector
+        selector = null
+      }
+      elem.addEventListener(type, event => {
+        const target = event.target
+        debugger
+        if (selector) {
+          debugger
+          // 代理绑定
+          if (target.matches(selector)) {
+            fn.call(target, event)  // 解决调用bindEvent的时候，参数为回调函数里面能用this，牛逼太牛逼了！！！！！！
+          }
+        } else {
+          // 普通绑定
+          fn.call(target, event)
+        }
+      })
+    }
+
+    const btn1 = document.getElementById('btn1')
+    const div3 = document.getElementById('div3')
+    bindEvent(btn1, 'click', function (event) {
+      event.stopPropagation()
+      // const target = event.target
+      // alert(target.innerHTML)
+      alert(this.innerHTML) // 牛逼！！！直接用this！！！！！
+    })
+    bindEvent(div3, 'click', 'li', function (event) {
+      event.stopPropagation()
+      event.preventDefault()
+      // const target = event.target
+      // alert(target.innerHTML)
+      alert(this.innerHTML) // 牛逼！！！直接用this！！！！！
+    })
+  </script>
+</body>
+</html>

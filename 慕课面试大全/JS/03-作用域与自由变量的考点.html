@@ -1,0 +1,30 @@
+<!--
+ * @Author: pengshengguang 499964903@qq.com
+ * @Date: 2024-06-20 18:11:54
+ * @LastEditors: pengshengguang 499964903@qq.com
+ * @LastEditTime: 2024-06-20 18:11:58
+ * @FilePath: /Front_End_Foundation/慕课面试大全/JS/04-作用域与自由变量的考点.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    let a
+    for (let i = 0; i < 10; i++) {
+      a = document.createElement('a')
+      a.innerHTML = i + '</br>'
+      a.addEventListener('click', function (e) {
+        e.preventDefault()
+        alert(i)
+      })
+      document.body.appendChild(a)
+    }
+  </script>
+</body>
+</html>

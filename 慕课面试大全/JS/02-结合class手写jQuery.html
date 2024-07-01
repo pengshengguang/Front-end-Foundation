@@ -1,0 +1,74 @@
+<!--
+ * @Author: pengshengguang 499964903@qq.com
+ * @Date: 2024-06-18 22:04:40
+ * @LastEditors: pengshengguang 499964903@qq.com
+ * @LastEditTime: 2024-06-18 22:23:15
+ * @FilePath: /Front_End_Foundation/慕课面试大全/JS/02-结合class手写jQuery.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <p>1</p>
+  <p>2</p>
+  <p>3</p>
+  <script>
+    class jQuery {
+      constructor(selector) {
+          const result = document.querySelectorAll(selector)
+          const length = result.length
+          for (let i = 0; i < length; i++) {
+              this[i] = result[i]
+          }
+          this.length = length
+          this.selector = selector
+      }
+      get(index) {
+          return this[index]
+      }
+      each(fn) {
+          for (let i = 0; i < this.length; i++) {
+              const elem = this[i]
+              fn(elem)
+          }
+      }
+      on(type, fn) {
+          this.each(elem => {
+              elem.addEventListener(type, fn, false)
+          })
+      }
+      // 扩展很多 DOM API
+    }
+
+    // 插件
+    jQuery.prototype.dialog = function (info) {
+        alert(info)
+    }
+
+    // “造轮子”
+    class myJQuery extends jQuery {
+        constructor(selector) {
+            super(selector)
+        }
+        // 扩展自己的方法
+        addClass(className) {
+
+        }
+        style(data) {
+            
+        }
+    }
+
+    const $p = new jQuery('p')
+    $p.get(1)
+    $p.each((elem) => console.log(elem.nodeName))
+    $p.on('click', () => alert('clicked'))
+
+  </script>
+</body>
+</html>

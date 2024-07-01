@@ -1,0 +1,47 @@
+<!--
+ * @Author: pengshengguang 499964903@qq.com
+ * @Date: 2024-06-20 18:16:09
+ * @LastEditors: pengshengguang 499964903@qq.com
+ * @LastEditTime: 2024-06-20 18:17:15
+ * @FilePath: /Front_End_Foundation/慕课面试大全/JS/04-手写bind函数.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 模拟 bind
+    Function.prototype.bind1 = function () {
+        // 将参数拆解为数组
+        const args = Array.prototype.slice.call(arguments)
+
+        // 获取 this（数组第一项）
+        const t = args.shift()
+
+        // fn1.bind(...) 中的 fn1
+        const self = this
+
+        // 返回一个函数
+        return function () {
+            return self.apply(t, args)
+        }
+    }
+
+    function fn1(a, b, c) {
+        console.log('this', this)
+        console.log(a, b, c)
+        return 'this is fn1'
+    }
+
+    const fn2 = fn1.bind1({x: 100}, 10, 20, 30)
+    const res = fn2()
+    console.log(res)
+
+  </script>
+</body>
+</html>
